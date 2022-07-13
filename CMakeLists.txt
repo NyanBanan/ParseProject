@@ -8,6 +8,7 @@ project(ParseProject)
 set(CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE)
 set(your_way_to_vcpkg D:/VCPKG)
 
+#set(CMAKE_TOOLCHAIN_FILE ${your_way_to_vcpkg}/scripts/buildsystems/vcpkg.cmake REQUIRED)
 include(${your_way_to_vcpkg}/scripts/buildsystems/vcpkg.cmake REQUIRED)
 
 find_package(Poco REQUIRED JSON)
