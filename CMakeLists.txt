@@ -11,11 +11,6 @@ set(CMAKE_TOOLCHAIN_FILE ${your_way_to_vcpkg}/scripts/buildsystems/vcpkg.cmake)
 
 project(ParseProject)
 
-#set(your_way_to_poco D:/VCPKG/packages/poco_x64-windows)
-#set(CMAKE_TOOLCHAIN_FILE ${your_way_to_vcpkg}/scripts/buildsystems/vcpkg.cmake REQUIRED)
-#include(${your_way_to_vcpkg}/scripts/buildsystems/vcpkg.cmake REQUIRED)
-#set(CMAKE_PREFIX_PATH ${your_way_to_poco})
-
 find_package(Poco REQUIRED JSON NET)
 set(SRC src/ParseProject.cpp)
 set(HEADERS h/ParseProject.h)
