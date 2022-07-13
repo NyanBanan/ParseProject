@@ -4,13 +4,16 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+#change to your way to vcpkg (need to correct work)
+set(your_way_to_vcpkg D:/VCPKG)
+
+set(CMAKE_TOOLCHAIN_FILE ${your_way_to_vcpkg}/scripts/buildsystems/vcpkg.cmake)
+
 project(ParseProject)
 
-set(your_way_to_vcpkg D:/VCPKG)
 #set(your_way_to_poco D:/VCPKG/packages/poco_x64-windows)
 #set(CMAKE_TOOLCHAIN_FILE ${your_way_to_vcpkg}/scripts/buildsystems/vcpkg.cmake REQUIRED)
 #include(${your_way_to_vcpkg}/scripts/buildsystems/vcpkg.cmake REQUIRED)
-
 #set(CMAKE_PREFIX_PATH ${your_way_to_poco})
 
 find_package(Poco REQUIRED Data JSON)
