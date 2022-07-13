@@ -16,10 +16,10 @@ project(ParseProject)
 #include(${your_way_to_vcpkg}/scripts/buildsystems/vcpkg.cmake REQUIRED)
 #set(CMAKE_PREFIX_PATH ${your_way_to_poco})
 
-find_package(Poco REQUIRED Data JSON)
+find_package(Poco REQUIRED JSON NET)
 set(SRC src/ParseProject.cpp)
 set(HEADERS h/ParseProject.h)
 
 add_executable(ParseProject ${SRC})
 
-target_link_libraries(ParseProject PRIVATE Poco::Data)
+target_link_libraries(ParseProject PRIVATE Poco::JSON POCO::NET)
