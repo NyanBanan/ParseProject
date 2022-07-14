@@ -13,11 +13,11 @@ add_compile_options(-Wall)
 
 project(ParseProject)
 
-find_package(Poco REQUIRED JSON Net)
-set(SRC src/ParseProject.cpp)
-set(HEADERS h/ParseProject.h)
+find_package(Poco REQUIRED JSON Net Foundation)
+set(SRC ParseProject.cpp)
+set(HEADERS ParseProject.h)
 
 
 add_executable(ParseProject ${SRC} ${HEADERS})
 
-target_link_libraries(ParseProject PRIVATE Poco::JSON Poco::Net)
+target_link_libraries(ParseProject PRIVATE Poco::JSON Poco::Net Poco::Foundation) 
