@@ -4,7 +4,7 @@
 
 
 void connect(){
-    std::ifstream conf("paramet312312ers.json", std::ifstream::binary);
+    std::ifstream conf("parameters.json", std::ifstream::binary);
 
     if(!conf.is_open())
         throw std::exception("Config file not open");
@@ -29,13 +29,6 @@ int main(){
     pChannel->setProperty("rotation", "2 K");  
     pChannel->setProperty("flush", "true");
 
-   /*  Poco::AutoPtr<Poco::PatternFormatter> patternFormatter(
-        new Poco::PatternFormatter("[%Y-%m-%d  %H:%M:%s] [%U(%u)] %p: %t"));
-    patternFormatter->setProperty("times", "local");
-    Poco::AutoPtr<Poco::FormattingChannel> formattingChannel(
-       new Poco::FormattingChannel(patternFormatter, pChannel));
-
-    Poco::Logger::root().setChannel(formattingChannel); */
     Poco::Logger::root().setChannel(pChannel);
 
     Poco::Logger& logger = Poco::Logger::get("WorkLogger");
@@ -56,6 +49,3 @@ int main(){
     return 0;
 }
 
-/*  Poco::Path a;
-    std::cout<<Poco::Path::find("D:/Diff Folders From C/Workbench/Code/newRepos/ParseProject","parameters.json",a); 
-    std::cout<<a.toString();*/
