@@ -9,12 +9,15 @@ set(your_way_to_vcpkg D:/VCPKG)
 
 set(CMAKE_TOOLCHAIN_FILE ${your_way_to_vcpkg}/scripts/buildsystems/vcpkg.cmake)
 
+add_compile_options(-Wall)
+
 project(ParseProject)
 
-find_package(Poco REQUIRED JSON NET)
+find_package(Poco REQUIRED JSON Net)
 set(SRC src/ParseProject.cpp)
 set(HEADERS h/ParseProject.h)
 
-add_executable(ParseProject ${SRC})
 
-target_link_libraries(ParseProject PRIVATE Poco::JSON POCO::NET)
+add_executable(ParseProject ${SRC} ${HEADERS})
+
+target_link_libraries(ParseProject PRIVATE Poco::JSON Poco::Net)
