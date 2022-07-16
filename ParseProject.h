@@ -1,5 +1,4 @@
-#ifndef PARSE_PROJ_INCLUDE
-#define PARSE_PROJ_INCLUDE
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <Poco/JSON/Parser.h>
@@ -10,4 +9,8 @@
 #include <Poco/FormattingChannel.h>
 #include <Poco/Logger.h>
 #include <Poco/PatternFormatter.h>
-#endif
+#include <Poco/Net/HTTPClientSession.h>
+#include <Poco/Net/HTTPRequest.h>
+#include <Poco/Net/HTTPResponse.h>
+#include <Poco/URI.h>
+#include <Poco/StreamCopier.h>
