@@ -1,7 +1,10 @@
 #pragma once
+#include <Poco/Net/NetSSL.h>
+#include <Poco/Crypto/Crypto.h>
 #include <iostream>
 #include <fstream>
 #include <Poco/JSON/Parser.h>
+//#include <Poco/JSON/Array.h>
 #include <Poco/Dynamic/Var.h>
 #include <Poco/File.h>
 #include <Poco/Path.h>
@@ -14,3 +17,6 @@
 #include <Poco/Net/HTTPResponse.h>
 #include <Poco/URI.h>
 #include <Poco/StreamCopier.h>
+#include <Poco/Net/OAuth20Credentials.h>
+#include <Poco/Net/HTTPSClientSession.h>
+#include <Poco/Net/Context.h>
