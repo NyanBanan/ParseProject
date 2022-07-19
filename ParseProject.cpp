@@ -10,7 +10,7 @@ private:
     std::string path; 
     Poco::Mutex mutex;
     Poco::Logger& logger=Poco::Logger::root();
-    std::tuple<std::string,std::string> get_parameters(std::string config_path); //initilizer of Token and URI
+    std::tuple<std::string,std::string> getParameters(std::string config_path); //initilizer of Token and URI
     void initilizeLogger(); //initilizer for logger
     void startSession(); 
     void logging();//process of logging
@@ -23,9 +23,10 @@ public:
 
 Responcer::Responcer(std::string config_path)
 {
-    key_and_adress=get_parameters(config_path);
-    startSession();
     initilizeLogger();
+    key_and_adress=getParameters(config_path);
+    startSession();
+
     Poco::RunnableAdapter<Responcer> runnable (*this, &Responcer::logging);
     
     Poco::Thread log_thread;
@@ -35,6 +36,7 @@ Responcer::Responcer(std::string config_path)
 }
 
 void Responcer::initilizeLogger(){
+    try{
     //file logger
     Poco::AutoPtr<Poco::SimpleFileChannel> pFile(new Poco::SimpleFileChannel);
     pFile->setProperty("path", "Work.log");
@@ -49,10 +51,18 @@ void Responcer::initilizeLogger(){
     //formatter
     Poco::AutoPtr<Poco::PatternFormatter> patternFormatter(
        new Poco::PatternFormatter("[%Y-%m-%d  %H:%M] %p: %t"));
+    patternFormatter->setProperty("times", "local");
     Poco::AutoPtr<Poco::FormattingChannel> formattingChannel(
        new Poco::FormattingChannel(patternFormatter, splitter_Channel));
+       
     logger.setChannel(formattingChannel);
-    logger.get("Log.log");
+    }
+    catch(Poco::Exception& e){
+        logger.error(std::string("(In InitilizeLogger) ")+e.name()+e.message());
+    }
+    catch(std::exception& e){
+        logger.error(std::string("(In InitilizeLogger) ")+e.what());
+    }
 }
 
 void Responcer::logging(){
@@ -75,10 +85,10 @@ void Responcer::logging(){
     Poco::Thread::yield();
     }
     catch(Poco::Exception& e){
-        logger.error(e.name()+e.message());
+        logger.error(std::string("(In logging) ")+e.name()+e.message());
     }
     catch(std::exception& e){
-        logger.error(e.what());
+        logger.error(std::string("(In logging) ")+e.what());
     }
     Poco::Thread::sleep(10000);
     }
@@ -94,7 +104,7 @@ void Responcer::startSession(){
 
     Poco::URI uri(std::get<1>(this->key_and_adress));
     path=uri.getPathAndQuery();
-
+    try{
     if(path.empty())
         path="/";
     Poco::Net::initializeSSL();
@@ -106,24 +116,36 @@ void Responcer::startSession(){
     req=new Poco::Net::HTTPRequest(Poco::Net::HTTPRequest::HTTP_GET,path,Poco::Net::HTTPMessage::HTTP_1_1);
     req->setCredentials("Token",std::get<0>(this->key_and_adress));
     req->setContentType("application/json");
+    }
+    catch(Poco::Exception& e){
+        logger.error(std::string("(In startSession) ")+e.name()+e.message());
+    }
+    catch(std::exception& e){
+        logger.error(std::string("(In startSession) ")+e.what());
+    }
 }
 
-std::tuple<std::string,std::string> Responcer::get_parameters(std::string file_path){
+std::tuple<std::string,std::string> Responcer::getParameters(std::string file_path){
     Poco::FileStream conf;
     try{
     conf.open(file_path, std::ios::out);
     }
-    catch(Poco::FileException& error){
-        throw Poco::Exception("Config file not open");
+    catch(Poco::FileException& e){
+        logger.error(std::string("(In getParameters) Config file not open ")+e.name()+" "+e.message());
     }
-
+    catch(std::exception& e){
+        logger.error(std::string("(In getParameters) Config file not open ")+e.what());
+    }
     Poco::JSON::Object::Ptr pParam;
     Poco::JSON::Parser parser;
     try{
         pParam = parser.parse(conf).extract<Poco::JSON::Object::Ptr>();
     }
-    catch(Poco::Exception& error){
-        throw Poco::Exception("Config file error");
+    catch(Poco::Exception& e){
+        logger.error(std::string("(In getParameters) Config file error ")+e.name()+" "+e.message());
+    }
+    catch(std::exception& e){
+        logger.error(std::string("(In getParameters) Config file error ")+e.what());
     }
     conf.close();
     std::string key=pParam->getValue<std::string>("key");
@@ -155,10 +177,10 @@ void Responcer::getResponce(){
     Poco::JSON::Stringifier::stringify(parsed_json,conf);
     }
     catch(Poco::Exception& e){
-        logger.error(e.message());
+        logger.error(std::string("(In getResponce) ")+e.message());
     }
     catch(std::exception& e){
-        logger.error(e.what());
+        logger.error(std::string("(In getResponce) ")+e.what());
     }
 }
 
