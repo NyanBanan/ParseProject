@@ -128,13 +128,19 @@ void Responcer::startSession(){
 std::tuple<std::string,std::string> Responcer::getParameters(std::string file_path){
     Poco::FileStream conf;
     try{
-    conf.open(file_path, std::ios::out);
+        Poco::File check(file_path);
+        if(check.exists())
+            conf.open(file_path, std::ios::in);
+        else 
+            throw Poco::Exception("");
     }
     catch(Poco::FileException& e){
         logger.error(std::string("(In getParameters) Config file not open ")+e.name()+" "+e.message());
+        return std::make_tuple(nullptr,nullptr);
     }
     catch(std::exception& e){
         logger.error(std::string("(In getParameters) Config file not open ")+e.what());
+        return std::make_tuple(nullptr,nullptr);
     }
     Poco::JSON::Object::Ptr pParam;
     Poco::JSON::Parser parser;
@@ -143,9 +149,11 @@ std::tuple<std::string,std::string> Responcer::getParameters(std::string file_pa
     }
     catch(Poco::Exception& e){
         logger.error(std::string("(In getParameters) Config file error ")+e.name()+" "+e.message());
+        return std::make_tuple(nullptr,nullptr);
     }
     catch(std::exception& e){
         logger.error(std::string("(In getParameters) Config file error ")+e.what());
+        return std::make_tuple(nullptr,nullptr);
     }
     conf.close();
     std::string key=pParam->getValue<std::string>("key");
@@ -167,12 +175,8 @@ void Responcer::getResponce(){
 
     Poco::Dynamic::Var parsed_json=parser.parse(ret);
 
-    Poco::File del("Answer.json");
-    if(del.exists())
-        del.remove();
-
     Poco::FileStream conf;
-    conf.open("Answer.json",std::ios::in);
+    conf.open("Answer.json",std::ios::trunc);
     
     Poco::JSON::Stringifier::stringify(parsed_json,conf);
     }
