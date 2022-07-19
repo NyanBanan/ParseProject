@@ -1,12 +1,5 @@
 cmake_minimum_required(VERSION 3.2)
 
-#FOR WINDOWS AND VCPKG (if you build for MinGW, comment or delete this block)
-##################################
-#change to your way to vcpkg (need to correct work)
-#set(your_way_to_vcpkg D:/VCPKG)
-
-#set(CMAKE_TOOLCHAIN_FILE ${your_way_to_vcpkg}/scripts/buildsystems/vcpkg.cmake)
-###################################
 project(ParseProject)
 
 set(CMAKE_CXX_STANDARD 20)
