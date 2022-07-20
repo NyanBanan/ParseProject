@@ -33,6 +33,7 @@
 #include <Poco/URI.h>
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/Context.h>
+#include <Poco/SharedPtr.h>
 //for errors
 #include "FunctionErrorsVariables.h"
 //all processes running in constructor of Responcer class

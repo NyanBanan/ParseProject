@@ -29,22 +29,22 @@ Responcer::~Responcer(){
 void Responcer::initilizeLogger(){
     try{
         //file logger
-        Poco::SimpleFileChannel::Ptr pFile(std::make_shared<Poco::SimpleFileChannel>().get());
+        Poco::SimpleFileChannel::Ptr pFile(Poco::makeAuto<Poco::SimpleFileChannel>());
         pFile->setProperty("path", "Work.log");
         pFile->setProperty("rotation", "2 M");
         pFile->setProperty("flush", "true");
         //console logger
-        Poco::ConsoleChannel::Ptr pCons(std::make_shared<Poco::ConsoleChannel>().get());
+        Poco::ConsoleChannel::Ptr pCons(Poco::makeAuto<Poco::ConsoleChannel>());
         //synchronize loggers
-        Poco::SplitterChannel::Ptr splitter_Channel(std::make_shared<Poco::SplitterChannel>().get());
+        Poco::SplitterChannel::Ptr splitter_Channel(Poco::makeAuto<Poco::SplitterChannel>());
         splitter_Channel->addChannel(pFile);
         splitter_Channel->addChannel(pCons);
         //formatter
         Poco::PatternFormatter::Ptr patternFormatter(
-            std::make_shared<Poco::PatternFormatter>("[%Y-%m-%d  %H:%M] %p: %t").get());
+            Poco::makeAuto<Poco::PatternFormatter>("[%Y-%m-%d  %H:%M] %p: %t"));
         patternFormatter->setProperty("times", "local");
         Poco::FormattingChannel::Ptr formattingChannel(
-            std::make_shared<Poco::FormattingChannel>(patternFormatter, splitter_Channel).get());
+            Poco::makeAuto<Poco::FormattingChannel>(patternFormatter, splitter_Channel));
        
         logger.setChannel(formattingChannel);
     }
@@ -99,12 +99,12 @@ void Responcer::startSession(const ConnectData& key_address){
         if(path.empty())
             path="/";
         Poco::Net::initializeSSL();
-        const Poco::Net::Context::Ptr context = std::make_shared<Poco::Net::Context>(
+        const Poco::Net::Context::Ptr context =Poco::makeAuto<Poco::Net::Context>(
             Poco::Net::Context::TLS_CLIENT_USE, "", "", "",
             Poco::Net::Context::VERIFY_NONE, 9, false,
-            "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH").get();
-        session = std::make_shared<Poco::Net::HTTPSClientSession>(uri.getHost(),uri.getPort(),context);
-        req= new Poco::Net::HTTPRequest(Poco::Net::HTTPRequest::HTTP_GET,path,Poco::Net::HTTPMessage::HTTP_1_1);
+            "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+        session = Poco::makeShared<Poco::Net::HTTPSClientSession>(uri.getHost(),uri.getPort(),context);
+        req= Poco::makeShared<Poco::Net::HTTPRequest>(Poco::Net::HTTPRequest::HTTP_GET,path,Poco::Net::HTTPMessage::HTTP_1_1);
         req->setCredentials("Token",key_address.key);
         req->setContentType("application/json");
     }
