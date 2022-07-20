@@ -10,8 +10,8 @@ add_compile_options(-Wall)
 
 find_package(Poco REQUIRED JSON Net Foundation XML Util NetSSL)
 find_package(OpenSSL REQUIRED)
-set(SRC ParseProject.cpp)
-set(HEADERS ParseProject.h)
+set(SRC ParseProject.cpp Responcer.cpp)
+set(HEADERS ParseProject.h Responcer.h FunctionErrorsVariables.h)
 
 add_executable(ParseProject ${SRC} ${HEADERS})
 
